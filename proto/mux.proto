@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+
+// The Mux service for the hum
+service Mux {
+
+    // Send data, one item per message, collected from the hum
+    rpc Send (stream SendRequest) returns (SendResponse);
+
+    // Listen to the hum
+    rpc Listen (ListenRequest) returns (stream ListenResponse);
+
+    // Ping debugging endpoint
+    rpc Ping (PingRequest) returns (PingResponse);
+}
+
+
+message SendRequest {
+    Datum datum = 1;
+}
+
+message SendResponse {
+    bool received = 1;
+}
+
+message ListenRequest {
+
+    // Filter in data by tag
+    repeated include_tags = 1;
+
+    // Filter out data by tag
+    repeated exclude_tags = 1;
+}
+
+message ListenResponse {
+    Datum datum = 1;
+}
+
+message PingRequest {
+    bool ping = 1;
+}
+
+message PingResponse {
+    bool pong = 1;
+}
+
+
+// ----------------------------------------------------------------------------
+// Shared messages
+// ----------------------------------------------------------------------------
+
+// Core datum/event structure
+message Datum {
+
+    // timestamp of the event (if available)
+    google.protobuf.Timestamp uts_event = 1;
+
+    // timestamp at time of collection
+    google.protobuf.Timestamp uts_collected = 1;
+
+    // source of the data / event
+    // TODO(cmc): should this be an enum?
+    //    source --> collector, parser
+    string source = 1;
+
+    // data
+    string data = 2;
+
+    // internal tags for the data
+    repeated string tags = 3;
+
+}
+
+
+# eof
