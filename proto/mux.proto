@@ -28,10 +28,10 @@ message SendResponse {
 message ListenRequest {
 
     // Filter in data by tag
-    repeated include_tags = 1;
+    repeated string include_tags = 1;
 
     // Filter out data by tag
-    repeated exclude_tags = 1;
+    repeated string exclude_tags = 2;
 }
 
 message ListenResponse {
@@ -58,20 +58,19 @@ message Datum {
     google.protobuf.Timestamp uts_event = 1;
 
     // timestamp at time of collection
-    google.protobuf.Timestamp uts_collected = 1;
+    google.protobuf.Timestamp uts_collected = 2;
 
     // source of the data / event
     // TODO(cmc): should this be an enum?
     //    source --> collector, parser
-    string source = 1;
+    string source = 3;
 
     // data
-    string data = 2;
+    string data = 4;
 
     // internal tags for the data
-    repeated string tags = 3;
+    repeated string tags = 5;
 
 }
 
 
-# eof
