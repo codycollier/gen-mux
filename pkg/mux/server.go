@@ -17,6 +17,7 @@ type muxServer struct{}
 func (s *muxServer) Inject(stream pb.Mux_InjectServer) error {
 
 	// TODO(cmc): find the mux and push messages
+
 	for {
 
 		req, err := stream.Recv()
@@ -39,6 +40,7 @@ func (s *muxServer) Inject(stream pb.Mux_InjectServer) error {
 func (s *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) error {
 
 	log.Printf("[muxd] Listen: received: %v", req)
+
 	// TODO(cmc): accept msg (with filters?) and start streaming from mux
 	// req
 
@@ -68,6 +70,8 @@ func (s *muxServer) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResp
 
 // Server initialization and start up
 func StartMuxServer(addr string) {
+
+	// TODO(cmc): Add support for ssl
 
 	// Setup gRPC server & register service
 	listener, err := net.Listen("tcp", addr)

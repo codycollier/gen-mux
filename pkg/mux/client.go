@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Call Mux and inject one or more events
 func CallInject(cl pb.MuxClient) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -21,6 +22,7 @@ func CallInject(cl pb.MuxClient) error {
 	}
 
 	// TODO(cmc) - take an iterable and stream it up
+
 	for {
 		req := &pb.InjectRequest{}
 		log.Printf("[muxc] Inject stream send: %v", req)
@@ -31,6 +33,7 @@ func CallInject(cl pb.MuxClient) error {
 	return nil
 }
 
+// Call Mux.Listen() and print each msg received
 func CallListen(cl pb.MuxClient) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -59,6 +62,7 @@ func CallListen(cl pb.MuxClient) error {
 	return nil
 }
 
+// Ping the Mux server
 func CallPing(cl pb.MuxClient) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
