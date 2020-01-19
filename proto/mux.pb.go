@@ -25,82 +25,82 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type SendRequest struct {
+type InjectRequest struct {
 	Datum                *Datum   `protobuf:"bytes,1,opt,name=datum,proto3" json:"datum,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SendRequest) Reset()         { *m = SendRequest{} }
-func (m *SendRequest) String() string { return proto.CompactTextString(m) }
-func (*SendRequest) ProtoMessage()    {}
-func (*SendRequest) Descriptor() ([]byte, []int) {
+func (m *InjectRequest) Reset()         { *m = InjectRequest{} }
+func (m *InjectRequest) String() string { return proto.CompactTextString(m) }
+func (*InjectRequest) ProtoMessage()    {}
+func (*InjectRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4935fe522b0ff4e1, []int{0}
 }
 
-func (m *SendRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_SendRequest.Unmarshal(m, b)
+func (m *InjectRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InjectRequest.Unmarshal(m, b)
 }
-func (m *SendRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_SendRequest.Marshal(b, m, deterministic)
+func (m *InjectRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InjectRequest.Marshal(b, m, deterministic)
 }
-func (m *SendRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SendRequest.Merge(m, src)
+func (m *InjectRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InjectRequest.Merge(m, src)
 }
-func (m *SendRequest) XXX_Size() int {
-	return xxx_messageInfo_SendRequest.Size(m)
+func (m *InjectRequest) XXX_Size() int {
+	return xxx_messageInfo_InjectRequest.Size(m)
 }
-func (m *SendRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_SendRequest.DiscardUnknown(m)
+func (m *InjectRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_InjectRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SendRequest proto.InternalMessageInfo
+var xxx_messageInfo_InjectRequest proto.InternalMessageInfo
 
-func (m *SendRequest) GetDatum() *Datum {
+func (m *InjectRequest) GetDatum() *Datum {
 	if m != nil {
 		return m.Datum
 	}
 	return nil
 }
 
-type SendResponse struct {
-	Received             bool     `protobuf:"varint,1,opt,name=received,proto3" json:"received,omitempty"`
+type InjectResponse struct {
+	MsgReceived          int32    `protobuf:"varint,1,opt,name=msg_received,json=msgReceived,proto3" json:"msg_received,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SendResponse) Reset()         { *m = SendResponse{} }
-func (m *SendResponse) String() string { return proto.CompactTextString(m) }
-func (*SendResponse) ProtoMessage()    {}
-func (*SendResponse) Descriptor() ([]byte, []int) {
+func (m *InjectResponse) Reset()         { *m = InjectResponse{} }
+func (m *InjectResponse) String() string { return proto.CompactTextString(m) }
+func (*InjectResponse) ProtoMessage()    {}
+func (*InjectResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4935fe522b0ff4e1, []int{1}
 }
 
-func (m *SendResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_SendResponse.Unmarshal(m, b)
+func (m *InjectResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InjectResponse.Unmarshal(m, b)
 }
-func (m *SendResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_SendResponse.Marshal(b, m, deterministic)
+func (m *InjectResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InjectResponse.Marshal(b, m, deterministic)
 }
-func (m *SendResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SendResponse.Merge(m, src)
+func (m *InjectResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InjectResponse.Merge(m, src)
 }
-func (m *SendResponse) XXX_Size() int {
-	return xxx_messageInfo_SendResponse.Size(m)
+func (m *InjectResponse) XXX_Size() int {
+	return xxx_messageInfo_InjectResponse.Size(m)
 }
-func (m *SendResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_SendResponse.DiscardUnknown(m)
+func (m *InjectResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_InjectResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SendResponse proto.InternalMessageInfo
+var xxx_messageInfo_InjectResponse proto.InternalMessageInfo
 
-func (m *SendResponse) GetReceived() bool {
+func (m *InjectResponse) GetMsgReceived() int32 {
 	if m != nil {
-		return m.Received
+		return m.MsgReceived
 	}
-	return false
+	return 0
 }
 
 type ListenRequest struct {
@@ -349,8 +349,8 @@ func (m *Datum) GetTags() []string {
 }
 
 func init() {
-	proto.RegisterType((*SendRequest)(nil), "SendRequest")
-	proto.RegisterType((*SendResponse)(nil), "SendResponse")
+	proto.RegisterType((*InjectRequest)(nil), "InjectRequest")
+	proto.RegisterType((*InjectResponse)(nil), "InjectResponse")
 	proto.RegisterType((*ListenRequest)(nil), "ListenRequest")
 	proto.RegisterType((*ListenResponse)(nil), "ListenResponse")
 	proto.RegisterType((*PingRequest)(nil), "PingRequest")
@@ -361,31 +361,32 @@ func init() {
 func init() { proto.RegisterFile("proto/mux.proto", fileDescriptor_4935fe522b0ff4e1) }
 
 var fileDescriptor_4935fe522b0ff4e1 = []byte{
-	// 372 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x91, 0x41, 0x6b, 0xab, 0x40,
-	0x10, 0xc7, 0x31, 0x31, 0x92, 0x8c, 0x9a, 0xc0, 0x1e, 0x1e, 0x22, 0x0f, 0x5e, 0x62, 0x2e, 0x79,
-	0x2d, 0x6c, 0x20, 0x3d, 0xf4, 0xd8, 0x43, 0xdb, 0x5b, 0x0b, 0xc5, 0xa6, 0xe7, 0x60, 0x74, 0x2a,
-	0x82, 0xee, 0xda, 0xec, 0x6e, 0x08, 0xfd, 0x76, 0xfd, 0x66, 0x65, 0x57, 0x2d, 0xa6, 0x87, 0xf6,
-	0x36, 0x33, 0xfc, 0x76, 0xfc, 0xfb, 0x1b, 0x98, 0xd5, 0x07, 0x2e, 0xf9, 0xba, 0x52, 0x27, 0x6a,
-	0xaa, 0xf0, 0x5f, 0xce, 0x79, 0x5e, 0xe2, 0xda, 0x74, 0x7b, 0xf5, 0xba, 0x96, 0x45, 0x85, 0x42,
-	0x26, 0x55, 0xdd, 0x00, 0xd1, 0x25, 0xb8, 0xcf, 0xc8, 0xb2, 0x18, 0xdf, 0x14, 0x0a, 0x49, 0xfe,
-	0xc2, 0x28, 0x4b, 0xa4, 0xaa, 0x02, 0x6b, 0x6e, 0xad, 0xdc, 0x8d, 0x43, 0xef, 0x74, 0x17, 0x37,
-	0xc3, 0xe8, 0x02, 0xbc, 0x06, 0x16, 0x35, 0x67, 0x02, 0x49, 0x08, 0xe3, 0x03, 0xa6, 0x58, 0x1c,
-	0x31, 0x33, 0x0f, 0xc6, 0xf1, 0x57, 0x1f, 0xbd, 0x80, 0xff, 0x50, 0x08, 0x89, 0xac, 0x5b, 0xbd,
-	0x00, 0xaf, 0x60, 0x69, 0xa9, 0x32, 0xdc, 0xc9, 0x24, 0x17, 0x81, 0x35, 0x1f, 0xae, 0x26, 0xb1,
-	0xdb, 0xce, 0xb6, 0x49, 0x2e, 0x34, 0x82, 0xa7, 0x1e, 0x32, 0x68, 0x90, 0x76, 0xa6, 0x91, 0x88,
-	0xc2, 0xb4, 0x5b, 0xdb, 0x86, 0xf8, 0x39, 0xf2, 0x02, 0xdc, 0xa7, 0x82, 0xe5, 0x5d, 0x08, 0x02,
-	0x76, 0x5d, 0xb0, 0xbc, 0x4d, 0x6b, 0xea, 0x28, 0x02, 0xaf, 0x41, 0xda, 0x85, 0x9a, 0xe1, 0x3d,
-	0x86, 0xb3, 0x3c, 0xfa, 0xb0, 0x60, 0x64, 0xf6, 0x92, 0x6b, 0x98, 0x28, 0x29, 0x76, 0x78, 0x44,
-	0x26, 0xdb, 0x4f, 0x86, 0xb4, 0xb1, 0x4c, 0x3b, 0xcb, 0x74, 0xdb, 0x59, 0x8e, 0xc7, 0x4a, 0x8a,
-	0x7b, 0xcd, 0x92, 0x1b, 0xf0, 0xf5, 0xc3, 0x94, 0x97, 0x25, 0xa6, 0x12, 0xb3, 0x60, 0xf0, 0xeb,
-	0x63, 0x4f, 0x49, 0x71, 0xdb, 0xf1, 0xe4, 0x0f, 0x38, 0x82, 0xab, 0x43, 0x8a, 0xc1, 0x70, 0x6e,
-	0xad, 0x26, 0x71, 0xdb, 0xe9, 0xbc, 0x59, 0x22, 0x93, 0xc0, 0x36, 0x53, 0x53, 0xeb, 0x99, 0x31,
-	0x38, 0x32, 0x06, 0x4d, 0xbd, 0x79, 0x87, 0xe1, 0xa3, 0x3a, 0x91, 0x25, 0xd8, 0xfa, 0x88, 0xc4,
-	0xa3, 0xbd, 0xc3, 0x87, 0x3e, 0x3d, 0xbb, 0xec, 0x7f, 0x70, 0x1a, 0xcd, 0x64, 0x4a, 0xcf, 0xce,
-	0x18, 0xce, 0xe8, 0x37, 0xff, 0x4b, 0xb0, 0xb5, 0x3e, 0xe2, 0xd1, 0x9e, 0xe8, 0xd0, 0xa7, 0x7d,
-	0xa7, 0x7b, 0xc7, 0xfc, 0xdd, 0xd5, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0xbf, 0xfc, 0xfb, 0x1c,
-	0xa1, 0x02, 0x00, 0x00,
+	// 389 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0xcf, 0x8a, 0xd4, 0x40,
+	0x10, 0xc6, 0xe9, 0x9d, 0x49, 0xd8, 0xa9, 0xfc, 0x19, 0xe8, 0x83, 0x84, 0x20, 0x38, 0x13, 0x2f,
+	0x01, 0xb1, 0x47, 0x76, 0x0f, 0x1e, 0x3d, 0xa8, 0x07, 0x41, 0x41, 0x9a, 0xf5, 0x3c, 0x64, 0x93,
+	0xb2, 0x89, 0x24, 0xdd, 0x71, 0xba, 0x7b, 0x99, 0x07, 0xf0, 0xc5, 0x7c, 0x33, 0xe9, 0x4e, 0x02,
+	0xc9, 0xc5, 0xbd, 0x55, 0x7d, 0xfc, 0xaa, 0xba, 0xf2, 0x7d, 0x81, 0xfd, 0x70, 0x51, 0x46, 0x9d,
+	0x7a, 0x7b, 0x65, 0xbe, 0xca, 0x5f, 0x09, 0xa5, 0x44, 0x87, 0x27, 0xdf, 0x3d, 0xda, 0x9f, 0x27,
+	0xd3, 0xf6, 0xa8, 0x4d, 0xd5, 0x0f, 0x23, 0x50, 0xbc, 0x85, 0xe4, 0x8b, 0xfc, 0x85, 0xb5, 0xe1,
+	0xf8, 0xdb, 0xa2, 0x36, 0xf4, 0x25, 0x04, 0x4d, 0x65, 0x6c, 0x9f, 0x91, 0x03, 0x29, 0xa3, 0xbb,
+	0x90, 0x7d, 0x72, 0x1d, 0x1f, 0xc5, 0xe2, 0x1e, 0xd2, 0x19, 0xd7, 0x83, 0x92, 0x1a, 0xe9, 0x11,
+	0xe2, 0x5e, 0x8b, 0xf3, 0x05, 0x6b, 0x6c, 0x9f, 0xb0, 0xf1, 0x63, 0x01, 0x8f, 0x7a, 0x2d, 0xf8,
+	0x24, 0x15, 0x3f, 0x20, 0xf9, 0xda, 0x6a, 0x83, 0x72, 0x7e, 0xe3, 0x08, 0x71, 0x2b, 0xeb, 0xce,
+	0x36, 0x78, 0x36, 0x95, 0xd0, 0x19, 0x39, 0x6c, 0xca, 0x1d, 0x8f, 0x26, 0xed, 0xa1, 0x12, 0xda,
+	0x21, 0x78, 0x5d, 0x20, 0x37, 0x23, 0x32, 0x69, 0x0e, 0x29, 0x18, 0xa4, 0xf3, 0xda, 0xe9, 0x96,
+	0xff, 0xdf, 0x7e, 0x84, 0xe8, 0x7b, 0x2b, 0xc5, 0x7c, 0x04, 0x85, 0xed, 0xd0, 0x4a, 0xe1, 0xd9,
+	0x5b, 0xee, 0xeb, 0xa2, 0x80, 0x78, 0x44, 0xa6, 0x85, 0x8e, 0x51, 0x0b, 0x46, 0x49, 0x51, 0xfc,
+	0x25, 0x10, 0xf8, 0xbd, 0xf4, 0x3d, 0xec, 0xac, 0xd1, 0x67, 0x7c, 0x42, 0x69, 0xa6, 0x27, 0x73,
+	0x36, 0x1a, 0xce, 0x66, 0xc3, 0xd9, 0xc3, 0x6c, 0x38, 0xbf, 0xb5, 0x46, 0x7f, 0x76, 0x2c, 0xfd,
+	0x00, 0x89, 0x1b, 0xac, 0x55, 0xd7, 0x61, 0x6d, 0xb0, 0xc9, 0x6e, 0x9e, 0x1d, 0x8e, 0xad, 0xd1,
+	0x1f, 0x67, 0x9e, 0xbe, 0x80, 0x50, 0x2b, 0x7b, 0xa9, 0x31, 0xdb, 0x1c, 0x48, 0xb9, 0xe3, 0x53,
+	0xe7, 0xee, 0x6d, 0x2a, 0x53, 0x65, 0x5b, 0xaf, 0xfa, 0xda, 0x69, 0xde, 0xc1, 0xc0, 0x3b, 0xe8,
+	0xeb, 0xbb, 0x3f, 0x04, 0x36, 0xdf, 0xec, 0x95, 0xbe, 0x81, 0x70, 0x8c, 0x93, 0xa6, 0x6c, 0xf5,
+	0x1b, 0xe4, 0x7b, 0xb6, 0xce, 0xb9, 0x24, 0x0e, 0x1e, 0xfd, 0xa6, 0x29, 0x5b, 0xe5, 0x99, 0xef,
+	0xd9, 0x3a, 0x88, 0x77, 0x84, 0xbe, 0x86, 0xad, 0x73, 0x92, 0xc6, 0x6c, 0xe1, 0x79, 0x9e, 0xb0,
+	0xa5, 0xbd, 0x8f, 0xa1, 0xff, 0xd0, 0xfb, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xb3, 0xa6, 0xcc,
+	0x67, 0xb7, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -401,9 +402,9 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MuxClient interface {
 	// Send data, one item per message, collected from the hum
-	Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*SendResponse, error)
+	Inject(ctx context.Context, opts ...grpc.CallOption) (Mux_InjectClient, error)
 	// Listen to the hum
-	Listen(ctx context.Context, in *ListenRequest, opts ...grpc.CallOption) (*ListenResponse, error)
+	Listen(ctx context.Context, in *ListenRequest, opts ...grpc.CallOption) (Mux_ListenClient, error)
 	// Ping debugging endpoint
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 }
@@ -416,22 +417,70 @@ func NewMuxClient(cc *grpc.ClientConn) MuxClient {
 	return &muxClient{cc}
 }
 
-func (c *muxClient) Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*SendResponse, error) {
-	out := new(SendResponse)
-	err := c.cc.Invoke(ctx, "/Mux/Send", in, out, opts...)
+func (c *muxClient) Inject(ctx context.Context, opts ...grpc.CallOption) (Mux_InjectClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Mux_serviceDesc.Streams[0], "/Mux/Inject", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &muxInjectClient{stream}
+	return x, nil
 }
 
-func (c *muxClient) Listen(ctx context.Context, in *ListenRequest, opts ...grpc.CallOption) (*ListenResponse, error) {
-	out := new(ListenResponse)
-	err := c.cc.Invoke(ctx, "/Mux/Listen", in, out, opts...)
+type Mux_InjectClient interface {
+	Send(*InjectRequest) error
+	CloseAndRecv() (*InjectResponse, error)
+	grpc.ClientStream
+}
+
+type muxInjectClient struct {
+	grpc.ClientStream
+}
+
+func (x *muxInjectClient) Send(m *InjectRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *muxInjectClient) CloseAndRecv() (*InjectResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(InjectResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *muxClient) Listen(ctx context.Context, in *ListenRequest, opts ...grpc.CallOption) (Mux_ListenClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Mux_serviceDesc.Streams[1], "/Mux/Listen", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &muxListenClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Mux_ListenClient interface {
+	Recv() (*ListenResponse, error)
+	grpc.ClientStream
+}
+
+type muxListenClient struct {
+	grpc.ClientStream
+}
+
+func (x *muxListenClient) Recv() (*ListenResponse, error) {
+	m := new(ListenResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *muxClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
@@ -446,9 +495,9 @@ func (c *muxClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.Call
 // MuxServer is the server API for Mux service.
 type MuxServer interface {
 	// Send data, one item per message, collected from the hum
-	Send(context.Context, *SendRequest) (*SendResponse, error)
+	Inject(Mux_InjectServer) error
 	// Listen to the hum
-	Listen(context.Context, *ListenRequest) (*ListenResponse, error)
+	Listen(*ListenRequest, Mux_ListenServer) error
 	// Ping debugging endpoint
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
 }
@@ -457,11 +506,11 @@ type MuxServer interface {
 type UnimplementedMuxServer struct {
 }
 
-func (*UnimplementedMuxServer) Send(ctx context.Context, req *SendRequest) (*SendResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
+func (*UnimplementedMuxServer) Inject(srv Mux_InjectServer) error {
+	return status.Errorf(codes.Unimplemented, "method Inject not implemented")
 }
-func (*UnimplementedMuxServer) Listen(ctx context.Context, req *ListenRequest) (*ListenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Listen not implemented")
+func (*UnimplementedMuxServer) Listen(req *ListenRequest, srv Mux_ListenServer) error {
+	return status.Errorf(codes.Unimplemented, "method Listen not implemented")
 }
 func (*UnimplementedMuxServer) Ping(ctx context.Context, req *PingRequest) (*PingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
@@ -471,40 +520,51 @@ func RegisterMuxServer(s *grpc.Server, srv MuxServer) {
 	s.RegisterService(&_Mux_serviceDesc, srv)
 }
 
-func _Mux_Send_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SendRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MuxServer).Send(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Mux/Send",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MuxServer).Send(ctx, req.(*SendRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+func _Mux_Inject_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MuxServer).Inject(&muxInjectServer{stream})
 }
 
-func _Mux_Listen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListenRequest)
-	if err := dec(in); err != nil {
+type Mux_InjectServer interface {
+	SendAndClose(*InjectResponse) error
+	Recv() (*InjectRequest, error)
+	grpc.ServerStream
+}
+
+type muxInjectServer struct {
+	grpc.ServerStream
+}
+
+func (x *muxInjectServer) SendAndClose(m *InjectResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *muxInjectServer) Recv() (*InjectRequest, error) {
+	m := new(InjectRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(MuxServer).Listen(ctx, in)
+	return m, nil
+}
+
+func _Mux_Listen_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ListenRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Mux/Listen",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MuxServer).Listen(ctx, req.(*ListenRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(MuxServer).Listen(m, &muxListenServer{stream})
+}
+
+type Mux_ListenServer interface {
+	Send(*ListenResponse) error
+	grpc.ServerStream
+}
+
+type muxListenServer struct {
+	grpc.ServerStream
+}
+
+func (x *muxListenServer) Send(m *ListenResponse) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 func _Mux_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -530,18 +590,21 @@ var _Mux_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MuxServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Send",
-			Handler:    _Mux_Send_Handler,
-		},
-		{
-			MethodName: "Listen",
-			Handler:    _Mux_Listen_Handler,
-		},
-		{
 			MethodName: "Ping",
 			Handler:    _Mux_Ping_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Inject",
+			Handler:       _Mux_Inject_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Listen",
+			Handler:       _Mux_Listen_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/mux.proto",
 }

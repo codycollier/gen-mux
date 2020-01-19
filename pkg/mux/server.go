@@ -11,37 +11,58 @@ import (
 // Core structure of the mux server
 type muxServer struct{}
 
-// Handler for Mux.Send()
-func (s *muxServer) Send(ctx context.Context, req *pb.SendRequest) (*pb.SendResponse, error) {
+// Accept incoming messages/events from the hum
+// Handler for:
+//  rpc Inject (stream SendRequest) returns (SendResponse);
+func (s *muxServer) Inject(stream pb.Mux_InjectServer) error {
 
-	log.Printf("[muxd] Send: received: %v", req)
+	// TODO(cmc): find the mux and push messages
+	for {
 
-	// TODO(cmc): accept msg and send to mux core
-	resp := &pb.SendResponse{}
+		req, err := stream.Recv()
+		if err != nil {
+			log.Printf("[muxd] Error receiving on Inject stream: %v", err)
+		}
 
-	log.Printf("[muxd] Send: sending: %v", resp)
-	return resp, nil
+		log.Printf("[muxd] Inject recv: %v", req)
+		// resp := &pb.InjectResponse{}
+		// log.Printf("[muxd] Inject send: %v", resp)
+		// stream.SendAndClose(resp)
+
+	}
+	return nil
 }
 
-// Handler for Mux.Listen()
-func (s *muxServer) Listen(ctx context.Context, req *pb.ListenRequest) (*pb.ListenResponse, error) {
+// Stream the hum out to a client
+// Handler for:
+//  rpc Listen (ListenRequest) returns (stream ListenResponse);
+func (s *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) error {
 
 	log.Printf("[muxd] Listen: received: %v", req)
+	// TODO(cmc): accept msg (with filters?) and start streaming from mux
+	// req
 
-	// TODO(cmc): accept msg and start streaming from mux
-	resp := &pb.ListenResponse{}
+	for {
+		resp := &pb.ListenResponse{}
+		log.Printf("[muxd] Listen: sending: %v", resp)
+		if err := stream.Send(resp); err != nil {
+			return err
+		}
+	}
+	return nil
 
-	log.Printf("[muxd] Listen: sending: %v", resp)
-	return resp, nil
 }
 
-// Handler for Mux.Ping() handler
+// Ping debugging endpoint
+// Handler for:
+//  rpc Ping (PingRequest) returns (PingResponse);
 func (s *muxServer) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResponse, error) {
+
 	log.Printf("[muxd] Ping: received: %v", req)
 
 	resp := &pb.PingResponse{Pong: true}
-
 	log.Printf("[muxd] Ping: sending: %v", resp)
+
 	return resp, nil
 }
 

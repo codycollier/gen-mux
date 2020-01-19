@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 service Mux {
 
     // Send data, one item per message, collected from the hum
-    rpc Send (stream SendRequest) returns (SendResponse);
+    rpc Inject (stream InjectRequest) returns (InjectResponse);
 
     // Listen to the hum
     rpc Listen (ListenRequest) returns (stream ListenResponse);
@@ -17,12 +17,12 @@ service Mux {
 }
 
 
-message SendRequest {
+message InjectRequest {
     Datum datum = 1;
 }
 
-message SendResponse {
-    bool received = 1;
+message InjectResponse {
+    int32 msg_received = 1;
 }
 
 message ListenRequest {
