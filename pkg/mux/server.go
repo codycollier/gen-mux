@@ -9,7 +9,10 @@ import (
 )
 
 // Core structure of the mux server
-type muxServer struct{}
+type muxServer struct {
+	mux_in  chan pb.Datum
+	mux_out chan pb.Datum
+}
 
 // Accept incoming messages/events from the hum
 // Handler for:
@@ -39,14 +42,14 @@ func (s *muxServer) Inject(stream pb.Mux_InjectServer) error {
 //  rpc Listen (ListenRequest) returns (stream ListenResponse);
 func (s *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) error {
 
-	log.Printf("[muxd] Listen: received: %v", req)
+	log.Printf("[muxd] Listen: recv: %v", req)
 
 	// TODO(cmc): accept msg (with filters?) and start streaming from mux
 	// req
 
 	for {
 		resp := &pb.ListenResponse{}
-		log.Printf("[muxd] Listen: sending: %v", resp)
+		log.Printf("[muxd] Listen: send: %v", resp)
 		if err := stream.Send(resp); err != nil {
 			return err
 		}
@@ -60,10 +63,10 @@ func (s *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) er
 //  rpc Ping (PingRequest) returns (PingResponse);
 func (s *muxServer) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResponse, error) {
 
-	log.Printf("[muxd] Ping: received: %v", req)
+	log.Printf("[muxd] Ping: recv: %v", req)
 
 	resp := &pb.PingResponse{Pong: true}
-	log.Printf("[muxd] Ping: sending: %v", resp)
+	log.Printf("[muxd] Ping: send: %v", resp)
 
 	return resp, nil
 }
@@ -71,17 +74,23 @@ func (s *muxServer) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResp
 // Server initialization and start up
 func StartMuxServer(addr string) {
 
-	// TODO(cmc): Add support for ssl
+	// Initialize mux
+	mux_server := &muxServer{}
+	initMux(mux_server)
 
 	// Setup gRPC server & register service
+	// TODO(cmc): Add support for ssl
+	log.Printf("[muxd] Setting up gRPC service")
+	log.Printf("[muxd] Will be listening on: %v", addr)
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatalf("[muxd] Error listening on %s", addr)
 	}
 	grpcServer := grpc.NewServer()
-	pb.RegisterMuxServer(grpcServer, &muxServer{})
+	pb.RegisterMuxServer(grpcServer, mux_server)
 
 	// Listen forever
+	log.Printf("[muxd] Starting server...")
 	grpcServer.Serve(listener)
 
 }
