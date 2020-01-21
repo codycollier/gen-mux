@@ -9,13 +9,15 @@ func main() {
 
 	addr := "127.0.0.1:8888"
 
-	log.Printf("[mtx] Creating mux client")
+	log.Printf("[mp] Creating mux client")
 	cl, conn := mux.GetNewMuxClient(addr)
 	defer conn.Close()
 
+	log.Printf("[mp] Sending pings")
 	mux.Ping(cl)
 	mux.Ping(cl)
 	mux.Ping(cl)
-	log.Printf("[mtc] Done")
+
+	log.Printf("[mp] Done")
 
 }
