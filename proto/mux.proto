@@ -22,7 +22,7 @@ message InjectRequest {
 }
 
 message InjectResponse {
-    int32 msg_received = 1;
+    int32 msg_count = 1;
 }
 
 message ListenRequest {

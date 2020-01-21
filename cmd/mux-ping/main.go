@@ -13,9 +13,9 @@ func main() {
 	cl, conn := mux.GetNewMuxClient(addr)
 	defer conn.Close()
 
-	mux.CallPing(cl)
-	mux.CallPing(cl)
-	mux.CallPing(cl)
+	mux.Ping(cl)
+	mux.Ping(cl)
+	mux.Ping(cl)
 	log.Printf("[mtc] Done")
 
 }

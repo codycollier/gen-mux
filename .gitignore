@@ -1,6 +1,6 @@
 
 
-cmd/mux-test-client/mux-test-client
+cmd/mux-ping/mux-ping
 cmd/muxd/muxd
 
 
