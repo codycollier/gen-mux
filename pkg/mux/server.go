@@ -34,6 +34,7 @@ func (s *muxServer) Inject(stream pb.Mux_InjectServer) error {
 		}
 		if err != nil {
 			log.Printf("[muxd] Error receiving on Inject stream: %v", err)
+			break
 		}
 		log.Printf("[muxd] Inject recv: %v", *req)
 
@@ -57,24 +58,38 @@ func (s *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) er
 	// TODO(cmc): add support for filters
 	// TODO(cmc): ...
 
-	log.Printf("[muxd] Listen recv: %v", req)
-
 	// Create and add a new listener channel to the mux
 	my_id := rand.Int63()
 	my_listener := make(chan pb.Datum)
 	s.mux_out[my_id] = my_listener
 
+	log.Printf("[muxd] Listen recv: %v [lid:%v]", req, my_id)
+
 	// Start the listener
+listen:
 	for {
-		msg := <-my_listener
-		resp := &pb.ListenResponse{Datum: &msg}
-		log.Printf("[muxd] Listen send: %v [lid:%v]", resp, my_id)
-		if err := stream.Send(resp); err != nil {
-			delete(s.mux_out, my_id)
-			close(my_listener)
-			return err
+		select {
+
+		// Stop listening if the client has closed
+		case <-stream.Context().Done():
+			log.Printf("[muxd] Listen client done [lid:%v]", my_id)
+			break listen
+
+		// Listen for messages from mux listener and send to client
+		case msg := <-my_listener:
+			// Send the message
+			resp := &pb.ListenResponse{Datum: &msg}
+			log.Printf("[muxd] Listen send: %v [lid:%v]", resp, my_id)
+			if err := stream.Send(resp); err != nil {
+				log.Printf("[muxd] Listen send err: %v [lid:%v]", err, my_id)
+				break listen
+			}
 		}
+
 	}
+
+	// cleanup
+	log.Printf("[muxd] Listen cleanup [lid:%v]", my_id)
 	delete(s.mux_out, my_id)
 	close(my_listener)
 	return nil
@@ -85,10 +100,10 @@ func (s *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) er
 //  rpc Ping (PingRequest) returns (PingResponse);
 func (s *muxServer) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResponse, error) {
 
-	log.Printf("[muxd] Ping: recv: %v", req)
+	log.Printf("[muxd] Ping recv: %v", req)
 
 	resp := &pb.PingResponse{Pong: true}
-	log.Printf("[muxd] Ping: send: %v", resp)
+	log.Printf("[muxd] Ping send: %v", resp)
 
 	return resp, nil
 }
