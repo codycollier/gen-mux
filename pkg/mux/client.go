@@ -6,14 +6,16 @@ import (
 	pb "hum/proto"
 	"io"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
 // Call Mux and inject one or more events
 func Inject(cl pb.MuxClient, input chan pb.Datum, done chan int) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
+	ctx := context.Background()
 
 	log.Printf("[muxc] Starting Inject stream")
 	stream, err := cl.Inject(ctx)
@@ -35,18 +37,32 @@ func Inject(cl pb.MuxClient, input chan pb.Datum, done chan int) error {
 	return nil
 }
 
-// Call Mux.Listen() and print each msg received
+// Call Mux.Listen() then listen and print each msg received
 func Listen(cl pb.MuxClient) error {
 
 	ctx := context.Background()
 
 	// Send initial request and start the stream
-	req := &pb.ListenRequest{}
+	req := &pb.ListenRequest{
+		IncludeTags: []string{"foo"},
+		ExcludeTags: []string{"baz"},
+	}
 	log.Printf("[muxc] Listen send: %v", req)
 	stream, err := cl.Listen(ctx, req)
 	if err != nil {
 		log.Printf("[muxc] Error calling Listen: %v", err)
 	}
+
+	// Catch os signals
+	sig := make(chan os.Signal)
+	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-sig
+		err := stream.CloseSend()
+		log.Printf("[muxc] Listen close err: %v", err)
+		log.Printf("[muxc] Listen close on ctrl-c")
+		os.Exit(0)
+	}()
 
 	// Listen to the stream of messages
 	for {
@@ -56,6 +72,7 @@ func Listen(cl pb.MuxClient) error {
 		}
 		if err != nil {
 			log.Printf("[muxc] Error on Listen stream: %v", err)
+			break
 		}
 		log.Printf("[muxc] Listen recv: %v", resp)
 	}
