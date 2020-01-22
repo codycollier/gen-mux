@@ -21,6 +21,7 @@ func Inject(cl pb.MuxClient, input chan pb.Datum, done chan int) error {
 	stream, err := cl.Inject(ctx)
 	if err != nil {
 		log.Printf("[muxc] Error creating Inject stream: %v", err)
+		os.Exit(1)
 	}
 
 	for datum := range input {
@@ -51,6 +52,7 @@ func Listen(cl pb.MuxClient) error {
 	stream, err := cl.Listen(ctx, req)
 	if err != nil {
 		log.Printf("[muxc] Error calling Listen: %v", err)
+		os.Exit(1)
 	}
 
 	// Catch os signals
@@ -91,6 +93,7 @@ func Ping(cl pb.MuxClient) error {
 	resp, err := cl.Ping(ctx, req)
 	if err != nil {
 		log.Printf("[muxc] Error calling Ping: %v", err)
+		os.Exit(1)
 	}
 	log.Printf("[muxc] Ping recv: %v", resp)
 
