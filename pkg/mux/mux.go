@@ -7,27 +7,27 @@ import (
 )
 
 // Initialize the core for a muxServer instance
-func initMux(mux *muxServer) error {
+func initMux(ms *muxServer) error {
 
 	log.Printf("[muxd] Initializing Mux structures")
 	rand.Seed(14028)
 
 	// Initialize the input / output channels
-	mux.mux_in = make(chan pb.Datum)
-	mux.mux_out = make(map[int64]chan pb.Datum)
-	go muxer(mux)
+	ms.mux_in = make(chan pb.Datum)
+	ms.mux_out = make(map[int64]chan pb.Datum)
+	go multiplexer(ms)
 
 	return nil
 }
 
 // Muxer - any msg that comes in, send it out on every outbound channel
-func muxer(mux *muxServer) {
+func multiplexer(ms *muxServer) {
 	for {
-		msg := <-mux.mux_in
-		for out_id, out_chan := range mux.mux_out {
+		msg := <-ms.mux_in
+		for out_id, out_chan := range ms.mux_out {
 			log.Printf("[muxd] copying message to listener: %v", out_id)
+			// TODO(cmc) - race condition with delete(ms.mux_out, my_id) in server.go
 			out_chan <- msg
 		}
 	}
-
 }

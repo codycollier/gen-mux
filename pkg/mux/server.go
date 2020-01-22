@@ -19,7 +19,7 @@ type muxServer struct {
 // Accept incoming messages/events from the hum
 // Handler for:
 //  rpc Inject (stream SendRequest) returns (SendResponse);
-func (s *muxServer) Inject(stream pb.Mux_InjectServer) error {
+func (ms *muxServer) Inject(stream pb.Mux_InjectServer) error {
 
 	// TODO(cmc): add a timeout in listening for inject?
 	// TODO(cmc): ...
@@ -39,7 +39,7 @@ func (s *muxServer) Inject(stream pb.Mux_InjectServer) error {
 		log.Printf("[muxd] Inject recv: %v", *req)
 
 		// Push the message to the mux
-		s.mux_in <- *req.Datum
+		ms.mux_in <- *req.Datum
 
 		count += 1
 
@@ -53,7 +53,7 @@ func (s *muxServer) Inject(stream pb.Mux_InjectServer) error {
 // Stream the hum out to a client
 // Handler for:
 //  rpc Listen (ListenRequest) returns (stream ListenResponse);
-func (s *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) error {
+func (ms *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) error {
 
 	// TODO(cmc): add support for filters
 	// TODO(cmc): ...
@@ -61,7 +61,7 @@ func (s *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) er
 	// Create and add a new listener channel to the mux
 	my_id := rand.Int63()
 	my_listener := make(chan pb.Datum)
-	s.mux_out[my_id] = my_listener
+	ms.mux_out[my_id] = my_listener
 
 	log.Printf("[muxd] Listen recv: %v [lid:%v]", req, my_id)
 
@@ -77,7 +77,6 @@ listen:
 
 		// Listen for messages from mux listener and send to client
 		case msg := <-my_listener:
-			// Send the message
 			resp := &pb.ListenResponse{Datum: &msg}
 			log.Printf("[muxd] Listen send: %v [lid:%v]", resp, my_id)
 			if err := stream.Send(resp); err != nil {
@@ -85,20 +84,20 @@ listen:
 				break listen
 			}
 		}
-
 	}
 
 	// cleanup
 	log.Printf("[muxd] Listen cleanup [lid:%v]", my_id)
-	delete(s.mux_out, my_id)
+	delete(ms.mux_out, my_id)
 	close(my_listener)
+
 	return nil
 }
 
 // Ping debugging endpoint
 // Handler for:
 //  rpc Ping (PingRequest) returns (PingResponse);
-func (s *muxServer) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResponse, error) {
+func (ms *muxServer) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResponse, error) {
 
 	log.Printf("[muxd] Ping recv: %v", req)
 
