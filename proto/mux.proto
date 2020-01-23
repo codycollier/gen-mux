@@ -68,8 +68,17 @@ message Datum {
     // data
     string data = 4;
 
+    // data format
+    DataForm form = 5;
+    enum DataForm {
+        UNKNOWN = 0;
+        STRING = 1;
+        CSV = 2;
+        JSON = 3;
+    }
+
     // internal tags for the data
-    repeated string tags = 5;
+    repeated string tags = 6;
 
 }
 
