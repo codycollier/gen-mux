@@ -9,25 +9,49 @@ import (
 // Initialize the core for a muxServer instance
 func initMux(ms *muxServer) error {
 
-	log.Printf("[muxd] Initializing Mux structures")
 	rand.Seed(14028)
 
-	// Initialize the input / output channels
+	// Setup the input channel and the listeners map
+	log.Printf("[muxd] Initializing mux structures")
 	ms.mux_in = make(chan pb.Datum)
-	ms.mux_out = make(map[int64]chan pb.Datum)
+	ms.mux_listeners = make(map[int64]muxListener)
+
+	// Start the mux
+	log.Printf("[muxd] Starting multiplexer")
 	go multiplexer(ms)
 
 	return nil
 }
 
-// Muxer - any msg that comes in, send it out on every outbound channel
+// Multiplexer - send any input message to all available listeners
 func multiplexer(ms *muxServer) {
+
+	// Start mux loop
 	for {
+
+		// Block, waiting for input
 		msg := <-ms.mux_in
-		for out_id, out_chan := range ms.mux_out {
-			log.Printf("[muxd] copying message to listener: %v", out_id)
-			// TODO(cmc) - race condition with delete(ms.mux_out, my_id) in server.go
-			out_chan <- msg
+
+		// Send it to every listener
+		for _, listener := range ms.mux_listeners {
+
+			select {
+
+			// Don't send if the client has closed
+			case <-listener.stream.Context().Done():
+				log.Printf("[muxd] mux: Removing listener [lid:%v]", listener.id)
+				// Remove the listener from the mux
+				delete(ms.mux_listeners, listener.id)
+
+			// Otherwise, send the message out
+			default:
+				// log.Printf("[muxd] mux: sending message to listener: %v", listener.id)
+				listener.input <- msg
+			}
+
+			// next listener
 		}
+
+		// done processing message. loop around and wait for another.
 	}
 }

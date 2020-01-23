@@ -10,10 +10,17 @@ import (
 	"net"
 )
 
-// Core structure of the mux server
+// Core structure of the mux server, multiplexing input to many listeners
 type muxServer struct {
-	mux_in  chan pb.Datum
-	mux_out map[int64]chan pb.Datum
+	mux_in        chan pb.Datum
+	mux_listeners map[int64]muxListener
+}
+
+// Definition of a single listener
+type muxListener struct {
+	id     int64
+	input  chan pb.Datum
+	stream pb.Mux_ListenServer
 }
 
 // Accept incoming messages/events from the hum
@@ -29,24 +36,28 @@ func (ms *muxServer) Inject(stream pb.Mux_InjectServer) error {
 
 		// Block and wait for an input
 		req, err := stream.Recv()
+
+		// Graceful close
 		if err == io.EOF {
+			resp := &pb.InjectResponse{MsgCount: count}
+			log.Printf("[muxd] Inject send close: %v", resp)
+			stream.SendAndClose(resp)
 			break
 		}
+
+		// Unexpected close
 		if err != nil {
 			log.Printf("[muxd] Error receiving on Inject stream: %v", err)
 			break
 		}
-		log.Printf("[muxd] Inject recv: %v", *req)
 
 		// Push the message to the mux
+		log.Printf("[muxd] Inject recv: %v", *req)
 		ms.mux_in <- *req.Datum
 
 		count += 1
 
 	}
-	resp := &pb.InjectResponse{MsgCount: count}
-	log.Printf("[muxd] Inject send close: %v", resp)
-	stream.SendAndClose(resp)
 	return nil
 }
 
@@ -58,39 +69,30 @@ func (ms *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) e
 	// TODO(cmc): add support for filters
 	// TODO(cmc): ...
 
-	// Create and add a new listener channel to the mux
-	my_id := rand.Int63()
-	my_listener := make(chan pb.Datum)
-	ms.mux_out[my_id] = my_listener
+	// Create a new listener for self
+	listener := muxListener{}
+	listener.id = rand.Int63()
+	listener.input = make(chan pb.Datum)
+	listener.stream = stream
 
-	log.Printf("[muxd] Listen recv: %v [lid:%v]", req, my_id)
+	// Add the listener to the mux
+	ms.mux_listeners[listener.id] = listener
 
-	// Start the listener
-listen:
+	// Start listening
+	log.Printf("[muxd] Listen recv: %v [lid:%v]", req, listener.id)
 	for {
-		select {
 
-		// Stop listening if the client has closed
-		case <-stream.Context().Done():
-			log.Printf("[muxd] Listen client done [lid:%v]", my_id)
-			break listen
+		// Block until listener recieves a message
+		msg := <-listener.input
+		resp := &pb.ListenResponse{Datum: &msg}
 
-		// Listen for messages from mux listener and send to client
-		case msg := <-my_listener:
-			resp := &pb.ListenResponse{Datum: &msg}
-			log.Printf("[muxd] Listen send: %v [lid:%v]", resp, my_id)
-			if err := stream.Send(resp); err != nil {
-				log.Printf("[muxd] Listen send err: %v [lid:%v]", err, my_id)
-				break listen
-			}
+		// Send the message out
+		log.Printf("[muxd] Listen send: %v [lid:%v]", resp, listener.id)
+		if err := stream.Send(resp); err != nil {
+			log.Printf("[muxd] Listen send err: %v [lid:%v]", err, listener.id)
+			return nil
 		}
 	}
-
-	// cleanup
-	log.Printf("[muxd] Listen cleanup [lid:%v]", my_id)
-	delete(ms.mux_out, my_id)
-	close(my_listener)
-
 	return nil
 }
 
