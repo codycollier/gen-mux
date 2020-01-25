@@ -1,6 +1,8 @@
 
 
+cmd/mux-listen/mux-listen
 cmd/mux-ping/mux-ping
+cmd/mux-send-test/mux-send-test
 cmd/muxd/muxd
 
 
