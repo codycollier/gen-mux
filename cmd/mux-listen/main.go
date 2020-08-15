@@ -1,8 +1,9 @@
 package main
 
 import (
-	"hum/pkg/mux"
 	"log"
+
+	"github.com/codycollier/hum-mux/pkg/mux"
 )
 
 func main() {

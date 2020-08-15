@@ -2,12 +2,14 @@ package mux
 
 import (
 	"context"
-	"google.golang.org/grpc"
-	pb "hum/proto"
 	"io"
 	"log"
 	"math/rand"
 	"net"
+
+	"google.golang.org/grpc"
+
+	pb "github.com/codycollier/hum-mux/proto"
 )
 
 // Core structure of the mux server, multiplexing input to many listeners
@@ -93,7 +95,6 @@ func (ms *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) e
 			return nil
 		}
 	}
-	return nil
 }
 
 // Ping debugging endpoint

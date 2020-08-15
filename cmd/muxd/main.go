@@ -1,7 +1,7 @@
 package main
 
 import (
-	"hum/pkg/mux"
+	"github.com/codycollier/hum-mux/pkg/mux"
 )
 
 func main() {

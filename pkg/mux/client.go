@@ -2,14 +2,16 @@ package mux
 
 import (
 	"context"
-	"google.golang.org/grpc"
-	pb "hum/proto"
 	"io"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"google.golang.org/grpc"
+
+	pb "github.com/codycollier/hum-mux/proto"
 )
 
 // Call Mux and inject one or more events

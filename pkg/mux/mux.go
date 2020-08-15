@@ -1,9 +1,10 @@
 package mux
 
 import (
-	pb "hum/proto"
 	"log"
 	"math/rand"
+
+	pb "github.com/codycollier/hum-mux/proto"
 )
 
 // Initialize the core for a muxServer instance

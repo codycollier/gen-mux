@@ -1,11 +1,13 @@
 package main
 
 import (
-	"github.com/golang/protobuf/ptypes"
-	"hum/pkg/mux"
-	pb "hum/proto"
 	"log"
 	"time"
+
+	"github.com/golang/protobuf/ptypes"
+
+	"github.com/codycollier/hum-mux/pkg/mux"
+	pb "github.com/codycollier/hum-mux/proto"
 )
 
 func main() {
@@ -27,12 +29,5 @@ func main() {
 		input <- pb.Datum{Data: "foo", UtsEvent: ptypes.TimestampNow()}
 		time.Sleep(800 * time.Millisecond)
 	}
-
-	// Close the input to signal no more messages to client
-	close(input)
-
-	// Wait for the client to finish up the stream
-	<-done
-	log.Printf("[mst] Done")
 
 }

@@ -1,10 +1,12 @@
 package main
 
 import (
-	"github.com/golang/protobuf/ptypes"
-	"hum/pkg/mux"
-	pb "hum/proto"
 	"log"
+
+	"github.com/golang/protobuf/ptypes"
+
+	"github.com/codycollier/hum-mux/pkg/mux"
+	pb "github.com/codycollier/hum-mux/proto"
 )
 
 func main() {
