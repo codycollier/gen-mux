@@ -3,6 +3,7 @@ package main
 import (
 	"hum/pkg/mux"
 	"log"
+	"time"
 )
 
 func main() {
@@ -13,11 +14,10 @@ func main() {
 	cl, conn := mux.GetNewMuxClient(addr)
 	defer conn.Close()
 
-	log.Printf("[mp] Sending pings")
-	mux.Ping(cl)
-	mux.Ping(cl)
-	mux.Ping(cl)
-
-	log.Printf("[mp] Done")
+	log.Printf("[mp] Starting ping loop")
+	for {
+		mux.Ping(cl)
+		time.Sleep(time.Millisecond * 500)
+	}
 
 }
