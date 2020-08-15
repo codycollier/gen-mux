@@ -3,7 +3,7 @@
 
 help:
 	@echo "------------------------------------------------------------------"
-	@echo " Makefile for the-hum"
+	@echo " Makefile for hum-mux"
 	@echo "------------------------------------------------------------------"
 	@echo " > make help   # show this help info"
 	@echo " > make build  # build "
