@@ -4,6 +4,9 @@
 cmd/*/*
 !cmd/*/*.go
 
+# don't commit output from make build
+bin/
+
 # local only vendoring for now
 vendor/
 
