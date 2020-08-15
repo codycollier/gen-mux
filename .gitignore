@@ -1,6 +1,10 @@
 
 
+# ignore auto-created bin files
 cmd/*/*
 !cmd/*/*.go
+
+# local only vendoring for now
+vendor/
 
 
