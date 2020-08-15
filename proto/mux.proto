@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
+option go_package = "github.com/codycollier/hum-mux/proto";
+
 
 // The Mux service for the hum
 service Mux {
