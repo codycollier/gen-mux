@@ -3,7 +3,7 @@
 
 help:
 	@echo "------------------------------------------------------------------"
-	@echo " Makefile for hum-mux"
+	@echo " Makefile"
 	@echo "------------------------------------------------------------------"
 	@echo " > make help   # show this help info"
 	@echo " > make build  # build "
@@ -17,7 +17,7 @@ proto-lint:
 
 .PHONY: proto
 proto:
-	protoc --go_out=plugins=grpc:. ./proto/mux.proto
+	protoc -I. --go_out=paths=source_relative:. --go_opt=plugins=grpc ./proto/mux.proto
 
 build:
 	GOBIN=$(PWD)/bin \

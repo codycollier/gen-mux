@@ -9,7 +9,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/codycollier/hum-mux/proto"
+	pb "github.com/codycollier/whisper-mux/proto"
 )
 
 // Core structure of the mux server, multiplexing input to many listeners
@@ -25,7 +25,7 @@ type muxListener struct {
 	stream pb.Mux_ListenServer
 }
 
-// Accept incoming messages/events from the hum
+// Accept incoming messages and inject
 // Handler for:
 //  rpc Inject (stream SendRequest) returns (SendResponse);
 func (ms *muxServer) Inject(stream pb.Mux_InjectServer) error {
@@ -63,7 +63,7 @@ func (ms *muxServer) Inject(stream pb.Mux_InjectServer) error {
 	return nil
 }
 
-// Stream the hum out to a client
+// Stream messages out to a client
 // Handler for:
 //  rpc Listen (ListenRequest) returns (stream ListenResponse);
 func (ms *muxServer) Listen(req *pb.ListenRequest, stream pb.Mux_ListenServer) error {

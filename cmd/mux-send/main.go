@@ -6,8 +6,8 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 
-	"github.com/codycollier/hum-mux/pkg/mux"
-	pb "github.com/codycollier/hum-mux/proto"
+	"github.com/codycollier/whisper-mux/pkg/mux"
+	pb "github.com/codycollier/whisper-mux/proto"
 )
 
 func main() {

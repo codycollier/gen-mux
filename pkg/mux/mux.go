@@ -4,7 +4,7 @@ import (
 	"log"
 	"math/rand"
 
-	pb "github.com/codycollier/hum-mux/proto"
+	pb "github.com/codycollier/whisper-mux/proto"
 )
 
 // Initialize the core for a muxServer instance

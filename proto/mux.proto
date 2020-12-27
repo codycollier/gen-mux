@@ -2,16 +2,16 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/codycollier/hum-mux/proto";
+option go_package = "github.com/codycollier/whisper-mux/proto";
 
 
-// The Mux service for the hum
+// The Mux service
 service Mux {
 
-    // Send data, one item per message, collected from the hum
+    // Endpoint for collectors to send data, one item per message
     rpc Inject (stream InjectRequest) returns (InjectResponse);
 
-    // Listen to the hum
+    // Endpoint for listening to incoming messages
     rpc Listen (ListenRequest) returns (stream ListenResponse);
 
     // Ping debugging endpoint
