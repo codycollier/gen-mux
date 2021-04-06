@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/codycollier/whisper-mux/proto";
+option go_package = "github.com/codycollier/gen-mux/proto";
 
 
 // The Mux service

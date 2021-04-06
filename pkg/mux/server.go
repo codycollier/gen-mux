@@ -9,7 +9,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/codycollier/whisper-mux/proto"
+	pb "github.com/codycollier/gen-mux/proto"
 )
 
 // Core structure of the mux server, multiplexing input to many listeners

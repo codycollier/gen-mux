@@ -11,7 +11,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/codycollier/whisper-mux/proto"
+	pb "github.com/codycollier/gen-mux/proto"
 )
 
 // Call Mux and inject one or more events

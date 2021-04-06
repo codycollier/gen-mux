@@ -1,4 +1,4 @@
-module github.com/codycollier/whisper-mux
+module github.com/codycollier/gen-mux
 
 go 1.15
 
